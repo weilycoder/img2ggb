@@ -1,0 +1,16 @@
+name = "img2ggb"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# 静态资源目录
+[assets]
+directory = "./public"
+
+# [vars]
+# 在这里配置环境变量，或使用 wrangler secret put 命令设置敏感信息
+# AI_API_KEY = "your-api-key"
+
+# 如果需要使用 KV 存储临时数据
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "your-kv-namespace-id"

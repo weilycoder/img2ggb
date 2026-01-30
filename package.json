@@ -1,0 +1,16 @@
+{
+    "name": "img2ggb",
+    "version": "1.0.0",
+    "description": "Upload geometry images and render with GeoGebra via AI analysis",
+    "main": "src/index.js",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy"
+    },
+    "devDependencies": {
+        "wrangler": "^4.61.1"
+    },
+    "dependencies": {
+        "openai": "^6.17.0"
+    }
+}
