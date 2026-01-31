@@ -11,5 +11,5 @@ directory = "./public"
 # AI_API_KEY = "your-api-key"
 
 # 配置信任的源（逗号分隔）
-# TRUSTED_ORIGINS = "https://example.com,https://app.example.com"
 # 默认信任本地开发环境和 workers.dev 域名
+TRUSTED_ORIGINS = "https://img2ggb.weilycoder.dpdns.org"
