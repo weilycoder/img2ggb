@@ -191,7 +191,7 @@
 
         /* GeoGebra 区域 */
         #geogebra-container {
-            width: 100%;
+            width: 100% !important;
             height: 800px;
             border-radius: 8px;
             overflow: hidden;
@@ -337,11 +337,15 @@
 
         // 初始化 GeoGebra
         function initGeoGebra() {
+            const container = document.getElementById('geogebra-container');
+            const GGB_WIDTH = 1280;
+            const GGB_HEIGHT = 800;
+
             const params = {
                 appName: 'classic',
                 perspective: 2,
-                width: document.getElementById('geogebra-container').offsetWidth,
-                height: document.getElementById('geogebra-container').offsetHeight,
+                width: GGB_WIDTH,
+                height: GGB_HEIGHT,
                 showToolBar: false,
                 showAlgebraInput: false,
                 showMenuBar: false,
@@ -352,6 +356,30 @@
                     api.setAxesVisible(true, true);
                     api.setGridVisible(true);
                     console.log('GeoGebra loaded');
+
+                    // 手动缩放逻辑
+                    function updateScale() {
+                        const scaler = container.querySelector('.applet_scaler');
+                        if (!scaler) return;
+                        container.style.width = '100% !important';
+
+                        // 用 h2 的宽度作为参考
+                        const h2 = container.parentElement.querySelector('h2');
+                        const containerWidth = h2 ? h2.offsetWidth : container.offsetWidth;
+                        const scale = containerWidth / GGB_WIDTH;
+
+                        scaler.style.transform = `scale(${scale})`;
+                        scaler.style.transformOrigin = '0 0';
+                        container.style.height = `${GGB_HEIGHT * scale}px`;
+                    }
+
+                    // 初始缩放
+                    updateScale();
+
+                    // 监听容器尺寸变化
+                    new ResizeObserver(() => {
+                        updateScale();
+                    }).observe(container);
                 }
             };
 
