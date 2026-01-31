@@ -105,62 +105,7 @@ npm run deploy
 
 ## GeoGebra 命令参考
 
-### 基础对象
-
-| 命令    | 说明       | 示例            |
-| ------- | ---------- | --------------- |
-| 定义点  | 创建坐标点 | `A = (0, 0)`    |
-| Segment | 线段       | `Segment(A, B)` |
-| Line    | 直线       | `Line(A, B)`    |
-| Ray     | 射线       | `Ray(A, B)`     |
-| Vector  | 向量       | `Vector(A, B)`  |
-
-### 圆与圆锥曲线
-
-| 命令     | 说明            | 示例                      |
-| -------- | --------------- | ------------------------- |
-| Circle   | 圆（圆心+半径） | `Circle(A, 3)`            |
-| Circle   | 圆（圆心+点）   | `Circle(A, B)`            |
-| Circle   | 圆（过三点）    | `Circle(A, B, C)`         |
-| Ellipse  | 椭圆            | `Ellipse(A, B, C)`        |
-| Parabola | 抛物线          | `Parabola(A, Line(B, C))` |
-
-### 多边形
-
-| 命令    | 说明     | 示例               |
-| ------- | -------- | ------------------ |
-| Polygon | 多边形   | `Polygon(A, B, C)` |
-| Polygon | 正多边形 | `Polygon(A, B, 6)` |
-
-### 变换与构造
-
-| 命令                  | 说明       | 示例                          |
-| --------------------- | ---------- | ----------------------------- |
-| Midpoint              | 中点       | `M = Midpoint(A, B)`          |
-| Perpendicular         | 垂线       | `Perpendicular(A, line)`      |
-| PerpendicularBisector | 垂直平分线 | `PerpendicularBisector(A, B)` |
-| Parallel              | 平行线     | `Parallel(A, line)`           |
-| AngleBisector         | 角平分线   | `AngleBisector(A, B, C)`      |
-
-### 特殊点与圆
-
-| 命令         | 说明   | 示例                    |
-| ------------ | ------ | ----------------------- |
-| Incircle     | 内切圆 | `Incircle(A, B, C)`     |
-| Circumcircle | 外接圆 | `Circumcircle(A, B, C)` |
-| Center       | 圆心   | `I = Center(circle)`    |
-| Centroid     | 重心   | `G = Centroid(A, B, C)` |
-
-### 测量
-
-| 命令      | 说明 | 示例                     |
-| --------- | ---- | ------------------------ |
-| Distance  | 距离 | `d = Distance(A, B)`     |
-| Angle     | 角度 | `α = Angle(A, B, C)`     |
-| Area      | 面积 | `s = Area(polygon)`      |
-| Perimeter | 周长 | `p = Perimeter(polygon)` |
-
-> 更多命令请参考 [GeoGebra 官方文档](https://wiki.geogebra.org/en/Manual)
+请参考 [GeoGebra 官方文档](https://wiki.geogebra.org/en/Manual)
 
 ## 配置说明
 
