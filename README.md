@@ -1,4 +1,4 @@
-> 正在绝赞编写 prompt 工程，AI 分析目前不可用，请等待更新。
+> NEEDED HELP: codegen 模块的 prompt 设计仍需优化
 
 # img2ggb
 
