@@ -7,6 +7,16 @@
     <title>几何图片转 GeoGebra</title>
     <script src="https://www.geogebra.org/apps/deployggb.js"></script>
     <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,22 +24,41 @@
         }
 
         body {
+            background-color: var(--bg-color);
+            background: radial-gradient(circle at 50% 0%, #111 0%, var(--bg-color) 100%);
+            color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        /* 噪点纹理层 - 使用伪元素实现，降低不透明度 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
         }
 
         h1 {
-            color: white;
+            color: var(--text-main);
             text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.05em;
+            font-size: 2.25rem;
         }
 
         .top-row {
@@ -51,10 +80,11 @@
         }
 
         .panel {
-            background: white;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
         }
 
         .panel.flex-column {
@@ -63,31 +93,33 @@
         }
 
         .panel h2 {
-            color: #333;
+            color: var(--text-muted);
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
         }
 
         /* 上传区域 */
         .upload-area {
-            border: 3px dashed #ccc;
+            border: 1px dashed var(--border-color);
             border-radius: 8px;
             padding: 40px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 15px;
+            color: var(--text-muted);
         }
 
-        .upload-area:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-
+        .upload-area:hover,
         .upload-area.dragover {
-            border-color: #667eea;
-            background: #e8ebff;
+            border-color: var(--text-main);
+            background: var(--hover-bg);
+            color: var(--text-main);
         }
 
         .upload-area input[type="file"] {
@@ -104,26 +136,29 @@
             margin: 15px auto;
             display: none;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
             object-fit: contain;
+            background: #000;
         }
 
         /* 按钮 */
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
+            background: var(--text-main);
+            color: var(--bg-color);
+            border: 1px solid transparent;
             padding: 12px 24px;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            opacity: 0.9;
         }
 
         .btn:disabled {
@@ -134,8 +169,9 @@
 
         /* 命令显示区 */
         .commands-area {
-            background: #1e1e1e;
-            color: #d4d4d4;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 15px;
             font-family: 'Consolas', 'Monaco', monospace;
@@ -149,7 +185,8 @@
 
         .commands-area:empty::before {
             content: '等待分析结果...';
-            color: #666;
+            color: #555;
+            font-style: italic;
         }
 
         /* GeoGebra 区域 */
@@ -158,7 +195,8 @@
             height: 800px;
             border-radius: 8px;
             overflow: hidden;
-            background: #f5f5f5;
+            background: #fff;
+            border: 1px solid var(--border-color);
         }
 
         /* 加载状态 */
@@ -173,8 +211,8 @@
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--text-main);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -194,8 +232,9 @@
 
         /* 错误提示 */
         .error-message {
-            background: #ffebee;
-            color: #c62828;
+            background: rgba(220, 38, 38, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             padding: 10px 15px;
             border-radius: 6px;
             margin-top: 10px;
@@ -221,22 +260,25 @@
             width: 100%;
             height: 100px;
             padding: 10px;
-            border: 2px solid #ddd;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             border-radius: 6px;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
             resize: vertical;
             margin-bottom: 10px;
+            transition: border-color 0.2s;
         }
 
         .manual-input textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--text-main);
         }
     </style>
 </head>
 
-<body>
+<body class="antialiased selection:bg-[#f0f0f0] selection:text-[#050505]">
     <div class="container">
         <h1>📐 几何图片转 GeoGebra</h1>
 
