@@ -3,7 +3,9 @@
  * 功能：上传几何图片 -> AI 解析 -> GeoGebra 渲染
  */
 
-import { analyzeGeometryImage } from './ai.js';
+// 使用新的流水线模块（分两步：OCR + 代码生成）
+import { analyzeGeometryImage } from './pipeline.js';
+// 旧模块已弃用但保留存档：import { analyzeGeometryImage } from './ai.js';
 
 /**
  * ArrayBuffer 转 Base64（分块处理，避免栈溢出）
@@ -156,12 +158,13 @@ async function handleAnalyze(request, env) {
         const base64Image = arrayBufferToBase64(arrayBuffer);
         const mimeType = imageFile.type || 'image/png';
 
-        // 调用 AI 分析图片
-        const geogebraCommands = await analyzeGeometryImage(base64Image, mimeType, env);
+        // 调用 AI 分析图片（两步流水线）
+        const result = await analyzeGeometryImage(base64Image, mimeType, env);
 
         return new Response(JSON.stringify({
             success: true,
-            commands: geogebraCommands
+            ocrResult: result.ocrResult,  // 返回 OCR 识别结果（可选，便于调试）
+            commands: result.commands
         }), {
             headers: { 'Content-Type': 'application/json' }
         });
