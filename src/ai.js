@@ -47,10 +47,10 @@ Polygon(A, B, C)
  */
 export async function analyzeGeometryImage(base64Image, mimeType, env) {
     const apiKey = env.AI_API_KEY;
+    const testMode = env.TEST_MODE === 'true';
 
-    if (!apiKey) {
-        // 如果没有配置 API Key，返回示例命令用于测试
-        console.warn('AI_API_KEY not configured, returning demo commands');
+    if (!apiKey || testMode) {
+        console.warn('AI_API_KEY not configured or test mode enabled, returning demo commands');
         return getDemoCommands();
     }
 
@@ -91,7 +91,7 @@ function extractGeoGebraCommands(content) {
 
     // 按行分割
     const lines = commands.split('\n');
-    
+
     // 过滤：移除空行、注释行和非命令行
     const validLines = lines
         .map(line => line.trim())
@@ -112,7 +112,7 @@ function extractGeoGebraCommands(content) {
  * 返回演示用的 GeoGebra 命令
  */
 function getDemoCommands() {
-    return `# 未提供 API Key，以下为演示用命令
+    return `# 测试环境下的示例 GeoGebra 命令
 # 绘制一个三角形及其内切圆
 A = (0, 0)
 B = (4, 0)
